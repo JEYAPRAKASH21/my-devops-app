@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/JEYAPRAKASH21/my-devops-app.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t myapp .'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh 'docker stop myapp || true'
+                sh 'docker rm myapp || true'
+                sh 'docker run -d -p 80:80 --name myapp myapp'
+            }
+        }
+    }
+}
